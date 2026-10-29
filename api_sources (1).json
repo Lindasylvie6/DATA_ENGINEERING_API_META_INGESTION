@@ -1,0 +1,77 @@
+[
+  {
+    "source_name": "github_issues",
+    "is_active": 1,
+    "base_url": "https://api.github.com",
+    "endpoint": "/repos/apache/spark/issues",
+    "extra_params": {
+      "state": "all"
+    },
+    "pagination_type": "page",
+    "page_param": "page",
+    "page_size_param": "per_page",
+    "page_size": 100,
+    "max_pages": 5,
+    "sleep_seconds": 1,
+    "load_type": "incremental",
+    "watermark_param": "since",
+    "watermark_field": "updated_at",
+    "watermark_type": "timestamp",
+    "watermark_default": "2026-10-01T00:00:00Z",
+    "overlap_minutes": 5,
+    "records_path": "",
+    "expected_schema_version": "v1",
+    "expected_columns": [
+      "id",
+      "number",
+      "title",
+      "state",
+      "created_at",
+      "updated_at",
+      "user.login",
+      "user.id"
+    ],
+    "bronze_folder": "Files/raw/github_issues",
+    "bronze_table": "bronze.github_issues",
+    "merge_key": "id",
+    "sorted_by_watermark": true
+  },
+  {
+    "source_name": "usgs_earthquakes",
+    "is_active": 1,
+    "base_url": "https://earthquake.usgs.gov",
+    "endpoint": "/fdsnws/event/1/query",
+    "extra_params": {
+      "format": "geojson",
+      "orderby": "time-asc",
+      "minmagnitude": "4.5"
+    },
+    "pagination_type": "offset",
+    "page_param": "offset",
+    "offset_start": 1,
+    "page_size_param": "limit",
+    "page_size": 1000,
+    "max_pages": 20,
+    "sleep_seconds": 1,
+    "load_type": "incremental",
+    "watermark_param": "updatedafter",
+    "watermark_field": "properties.updated",
+    "watermark_type": "epoch_ms",
+    "watermark_default": "2026-10-15T00:00:00Z",
+    "overlap_minutes": 5,
+    "records_path": "features",
+    "expected_schema_version": "v1",
+    "expected_columns": [
+      "id",
+      "properties.mag",
+      "properties.place",
+      "properties.time",
+      "properties.updated",
+      "geometry.coordinates"
+    ],
+    "bronze_folder": "Files/raw/usgs_earthquakes",
+    "bronze_table": "bronze.usgs_earthquakes",
+    "merge_key": "id",
+    "sorted_by_watermark": false
+  }
+]
